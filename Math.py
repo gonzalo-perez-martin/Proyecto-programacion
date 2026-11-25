@@ -1,3 +1,20 @@
+#Gauss
+def my_Gauss(A,b)
+  n = len(b)   x = zeros(n)
+  # Eliminación hacia adelante
+  for k in range(n-1):
+      for i in range(k+1, n):
+          C = A[i,k] / A[k,k]
+          A[i,k:] = A[i,k:] - C * A[k,k:]
+          b[i] = b[i] - C * b[k]
+  # Sustitución hacia atrás
+  for i in range(n-1, -1, -1):
+       x[i] = (b[i] - dot(A[i,i+1:], x[i+1:])) / A[i,i]
+  return x
+
+#Factorización LU
+
+#Jacobi
 def my_Jacobi(A, b): 
     N = len(b)
     x, D, R = zeros(N), zeros(N), zeros((N,N))
@@ -22,15 +39,3 @@ def my_Jacobi(A, b):
     return xn
 # Jacobi no resuelve esta matriz porque no converge en este caso, ya que no es diagonalmente dominante. 
 # Donde el valor absoluto de la diagonal principal es menor que la suma de los valores absolutos de los otros elementos en la fila.
-def my_Gauss(A,b)
-  n = len(b)   x = zeros(n)
-  # Eliminación hacia adelante
-  for k in range(n-1):
-      for i in range(k+1, n):
-          C = A[i,k] / A[k,k]
-          A[i,k:] = A[i,k:] - C * A[k,k:]
-          b[i] = b[i] - C * b[k]
-  # Sustitución hacia atrás
-  for i in range(n-1, -1, -1):
-       x[i] = (b[i] - dot(A[i,i+1:], x[i+1:])) / A[i,i]
-  return x
