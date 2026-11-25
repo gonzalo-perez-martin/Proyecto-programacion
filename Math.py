@@ -1,3 +1,7 @@
+from numpy import array, dot, zeros 
+from numpy.linalg import norm
+from scipy.linalg import lu, lu_factor, lu_solve
+
 #Gauss
 def my_Gauss(A,b)
   n = len(b)   x = zeros(n)
