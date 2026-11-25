@@ -13,6 +13,10 @@ def my_Gauss(A,b)
   return x
 
 #Factorización LU
+def LU(A,b):
+    lu, piv = lu_factor(A)
+    x = lu_solve((lu, piv), b)
+    return x
 
 #Jacobi
 def my_Jacobi(A, b): 
@@ -21,8 +25,7 @@ def my_Jacobi(A, b):
     xn = 1 + x 
     tolerance = 1e-10
     k, max_iter = 0, 100
-
-    # Jacobi iteration
+  #Iteración
     for i in range(N): 
         for j in range(N): 
             if i == j: 
@@ -39,3 +42,24 @@ def my_Jacobi(A, b):
     return xn
 # Jacobi no resuelve esta matriz porque no converge en este caso, ya que no es diagonalmente dominante. 
 # Donde el valor absoluto de la diagonal principal es menor que la suma de los valores absolutos de los otros elementos en la fila.
+
+def my_Gauss_Seidel(A, b):
+
+    N = len(b)
+    x1, x2, b1 = zeros(N), zeros(N), zeros(N)
+    Error, tolerance = 1, 1e-10 
+    k, max_iter = 0, 100
+    #Iteracion
+    while Error > tolerance  and  k < max_iter: 
+
+        x1[:] = x2[:] 
+        for i in range(N):
+            b1[i] = b[i] - dot( A[i, i+1:], x1[i+1:] )
+
+        for i in range(N):
+            x2[i]  = ( b1[i] - dot( A[i, :i], x2[:i] ) )/ A[i, i] 
+         
+        Error = norm(x2-x1)
+        k += 1
+    return x2
+#Gauss Seidel no funciona por el mismo motivo que el Jacobi, no tiene una diagonal principal dominante.
