@@ -76,25 +76,35 @@ v_vuelo = 800 * np.sin(np.pi * t_vuelo / 60) * np.exp(-0.02 * t_vuelo)
 # APARTADO 6: Altitud apogeo (Integración numérica)
 # ============================================================
 
+def velocidad(t):
+    """Perfil de velocidad del cohete [m/s] (el mismo que genera v_vuelo)."""
+    return 800 * np.sin(np.pi * t / 60) * np.exp(-0.02 * t)
+
+
 def apartado6():
 
     """
     Calcula la altitud total alcanzada a los 60 s integrando la curva de velocidad
-    experimental (v_vuelo) con la regla del trapecio:
+    experimental (v_vuelo) con la regla del trapecio de NumPy:
         h_total = ∫ v(t) dt   (de 0 a 60 s)
 
-    Como comprobación, tambien compararemos el resultado con la regla de Simpson (SciPy).
+    Como comprobación, se compara con:
+        - la implementación propia (my_trapecio), con los mismos 1199 subintervalos
+        - la regla de Simpson (SciPy), más precisa
 
     Devuelve:
                 diccionario con los datos para la GUI
     """
-    h_total   = trapecio_datos(t_vuelo, v_vuelo)        # Método que se pide: Trapecio con arrays
-    h_simpson = simpson(v_vuelo, x=t_vuelo)             # Comparación con Simpson
+    h_total = np.trapezoid(v_vuelo, t_vuelo)            # Trapecio de NumPy sobre los datos
+
+    n = len(t_vuelo) - 1                                # 1200 nodos -> 1199 subintervalos
+    h_propia  = my_trapecio(velocidad, 0, 60, n)        # Comprobación: implementación propia
+    h_simpson = simpson(v_vuelo, x=t_vuelo)             # Comprobación: Simpson (SciPy)
 
     print(f"Apartado 6: La altitud total alcanzada a los 60 s es de {h_total:.2f} m "
-          f"({h_total/1000:.3f} km). Con Simpson se obtiene {h_simpson:.2f} m, "
-          f"una diferencia de {abs(h_simpson - h_total):.3f} m, lo que confirma "
-          f"la precisión de la regla del trapecio.")
+          f"({h_total/1000:.3f} km). Con la implementación propia se obtiene {h_propia:.2f} m, "
+          f"idéntico al de NumPy, y con Simpson {h_simpson:.2f} m, una diferencia de "
+          f"{abs(h_simpson - h_total):.3f} m, lo que confirma la precisión de la regla del trapecio.")
 
     return {
         "titulo": "Apartado 6: Altitud apogeo",
