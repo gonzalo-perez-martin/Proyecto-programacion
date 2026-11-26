@@ -4,12 +4,12 @@ Modelos físicos y datos del cohete sonda AeroPy-I.
 
 Contenido:
   Datos de partida
-  Apartado 1: ...
-  Apartado 2: ...
-  Apartado 3: ...
-  Apartado 4: ...
-  Apartado 5: ...
-  Apartado 6: ...
+    Apartado 1: Balance de masas (Sistema lineal)
+    Apartado 2: Calibración del motor (Regresión lineal)
+    Apartado 3: Perfil atmosférico (Interpolación 1D)
+    Apartado 4: Régimen transónico (Ecuación no lineal)
+    Apartado 5: Acelerómetro virtual (Derivación numérica)
+    Apartado 6: Altitud apogeo (Integración numérica) 
 """
 import numpy as np
 from mathematics import *
@@ -18,6 +18,29 @@ from mathematics import *
 # ============================================================
 # DATOS DE PARTIDA
 # ============================================================
+
+# 1. Calibración del sensor principal de empuje (Voltaje [V] vs Fuerza [kN])
+voltaje_sensor = np.array([0.0, 1.25, 2.45, 3.80, 5.10])
+fuerza_real    = np.array([0.0, 15.2, 31.0, 48.5, 65.3])
+
+# 2. Reacciones en la plataforma de lanzamiento (Coordenadas apoyos y pesos)
+# Matriz de geometría estática (distancias en m) para el balance de masas
+matriz_estatica = np.array([
+    [ 1.0, 1.0,  1.0],      # Suma de fuerzas Z
+    [ 0.0, 1.5, -1.5],      # Momentos en X
+    [-2.0, 1.0,  1.0]       # Momentos en Y
+])
+vector_cargas = np.array([25000.0, 1500.0, -800.0])     # [N, Nm, Nm]
+
+# 3. Datos de Atmósfera Estándar (Altitud [m], Temperatura [K], Presión [Pa])
+h_atm = np.array([0, 2000, 4000, 6000, 8000, 10000, 12000, 14000])
+T_atm = np.array([288.15, 275.15, 262.15, 249.15, 236.15, 223.15, 216.65, 216.65])
+P_atm = np.array([101325, 79501, 61660, 47217, 35651, 26499, 19399, 14170])
+
+# 4. Telemetría de vuelo: Tiempo [s] y Velocidad [m/s]
+t_vuelo = np.linspace(0, 60, 1200)      # Muestreo a 20 Hz
+# (Perfil simulado de velocidad de un cohete)
+v_vuelo = 800 * np.sin(np.pi * t_vuelo / 60) * np.exp(-0.02 * t_vuelo)
 
 
 
