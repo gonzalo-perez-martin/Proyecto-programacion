@@ -72,8 +72,35 @@ v_vuelo = 800 * np.sin(np.pi * t_vuelo / 60) * np.exp(-0.02 * t_vuelo)
 # APARTADO 5: ...
 # ============================================================
 
-
-
 # ============================================================
-# APARTADO 6: ...
+# APARTADO 6: Altitud apogeo (Integración numérica)
 # ============================================================
+
+def apartado6():
+
+    """
+    Calcula la altitud total alcanzada a los 60 s integrando la curva de velocidad
+    experimental (v_vuelo) con la regla del trapecio:
+        h_total = ∫ v(t) dt   (de 0 a 60 s)
+
+    Como comprobación, tambien compararemos el resultado con la regla de Simpson (SciPy).
+
+    Devuelve:
+                diccionario con los datos para la GUI
+    """
+    h_total   = trapecio_datos(t_vuelo, v_vuelo)        # Método que se pide: Trapecio con arrays
+    h_simpson = simpson(v_vuelo, x=t_vuelo)             # Comparación con Simpson
+
+    print(f"Apartado 6: La altitud total alcanzada a los 60 s es de {h_total:.2f} m "
+          f"({h_total/1000:.3f} km). Con Simpson se obtiene {h_simpson:.2f} m, "
+          f"una diferencia de {abs(h_simpson - h_total):.3f} m, lo que confirma "
+          f"la precisión de la regla del trapecio.")
+
+    return {
+        "titulo": "Apartado 6: Altitud apogeo",
+        "xlabel": "Tiempo [s]",
+        "ylabel": "Velocidad [m/s]",
+        "curvas": [(t_vuelo, v_vuelo, "-", "v(t)")],
+        "barras": None,
+        "texto":  f"h total = {h_total:.2f} m",
+    }
