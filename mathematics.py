@@ -33,6 +33,29 @@ def my_Gauss(A,b):
        x[i] = (b[i] - dot(A[i,i+1:], x[i+1:])) / A[i,i]      # Se calcula el producto escalar de los coeficientes de las incógnitas, 
   return x                                                   # se pasan esos términos al otro lado y se divide por el coeficiente de la incógnita que se quiere obtener (basicamente un despeje)
 
+
+def my_Jacobi(A, b): 
+    N = len(b)                                      # N es el número de incógnitas
+    x, D, R = zeros(N), zeros(N), zeros((N,N))      # x es el vector inicial de incógnitas, D almacenará la diagonal principal y R los elementos fuera de la diagonal principal
+    xn = 1 + x                                      # Se crea una aproximacion diferente de x para que entre en bucle
+    tolerance = 1e-10                               # Se establece el error maximo permitido
+    k, max_iter = 0, 100                            # k es el contador de iteraciones y 100 el maximo
+  #Iteración
+    for i in range(N): 
+        for j in range(N): 
+            if i == j:                               # Se toma lña diagonal principal i==j
+                D[i] = A[i,j]                        # Se guardan los elementos en la diagonal
+                R[i,j] = 0                           # Se pone un 0 en esa posición de R (se quita la diagonal principal en R)
+            else:
+                R[i,j] = A[i,j]                      #Se guarda el elemento en R
+   
+    while norm(xn - x) > tolerance and k < max_iter:    # Se calcula la direfencia entre las aproximaciones y tolerance comprueba si todavia se está lejos de la aproximación y se ve si se superaron las iteraciones
+        x = xn                                          # Se guarda la aproximación anterior
+        xn = (b - dot(R, x)) / D                        # Calculamos una nueva aproximación, todo esto se basa en la formula matemática de Jacobi
+        k += 1                                          # Se suma una iteración evitando que siga hasta el infinito
+
+    return xn
+
 # --- 1.2 Implementación con NumPy ---
 
 
