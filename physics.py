@@ -48,7 +48,11 @@ v_vuelo = 800 * np.sin(np.pi * t_vuelo / 60) * np.exp(-0.02 * t_vuelo)
 # APARTADO 1: ...
 # ============================================================
 
+def Balance(A, b)
+    x = np.linalg.solve(A, b)
+    return x
 
+def Apartado1()
 
 # ============================================================
 # APARTADO 2: ...
