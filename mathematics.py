@@ -75,8 +75,14 @@ def my_Gauss_Seidel(A, b):
          
         Error = norm(x2-x1)                                          # Calculamos la diferencia entre las aproximaciones
         k += 1                                                       # Sumamos una iteración
+
+
 # --- 1.2 Implementación con NumPy ---
 
+def LU(A,b):
+    lu, piv = lu_factor(A)                         # lu_factor hace la factorización LU, lu almacena las matrices L y U y piv los intercambios de filas realizados
+    x = lu_solve((lu, piv), b)                     # Se resuelven los sistemas triangulares utilizando LU
+    return x
 
 
 # ============================================================
