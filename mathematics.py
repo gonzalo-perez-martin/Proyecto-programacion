@@ -75,7 +75,7 @@ def my_Gauss_Seidel(A, b):
          
         Error = norm(x2-x1)                                          # Calculamos la diferencia entre las aproximaciones
         k += 1                                                       # Sumamos una iteración
-
+      
 
 # --- 1.2 Implementación con NumPy ---
 
