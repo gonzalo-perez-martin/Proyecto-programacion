@@ -20,6 +20,18 @@ Contenido:
 
 # --- 1.1 Implementación propia ---
 
+def my_Gauss(A,b):
+  n = len(b)   x = zeros(n)  # n es el número de incognitas y x donde guardaremos las soluciones
+  # Eliminación hacia adelante
+  for k in range(n-1):                             # Recorremos columnas donde se usa un pivote
+      for i in range(k+1, n):                      # Recorremos las filas debajo del pivote
+          C = A[i,k] / A[k,k]                      # Calculamos por cuánto hay que multiplicar el número de abajo del pìvote para eliminarlo
+          A[i,k:] = A[i,k:] - C * A[k,k:]          # Se resta a la fila que se quiere eliminar la fila del pivote por el número anterior
+          b[i] = b[i] - C * b[k]                   # Lo mismo pero en el vector de términos independientes
+  # Sustitución hacia atrás
+  for i in range(n-1, -1, -1):                               # Ahora que tenemos la matriz triangular superior, por lo que se recorren las filas de abajo a arriba
+       x[i] = (b[i] - dot(A[i,i+1:], x[i+1:])) / A[i,i]      # Se calcula el producto escalar de los coeficientes de las incógnitas, 
+  return x                                                   # se pasan esos términos al otro lado y se divide por el coeficiente de la incógnita que se quiere obtener (basicamente un despeje)
 
 # --- 1.2 Implementación con NumPy ---
 
