@@ -56,6 +56,25 @@ def my_Jacobi(A, b):
 
     return xn
 
+
+def my_Gauss_Seidel(A, b):
+
+    N = len(b)                                                       # N es el número de incognitas
+    x1, x2, b1 = zeros(N), zeros(N), zeros(N)                        # x1 aproximación anterior, x2 aproximación nueva y b1 almacena los términos independientes modificados
+    Error, tolerance = 1, 1e-10                                      # Error es el error inicial para entrar en bucle y tolerance el error maximo permitido
+    k, max_iter = 0, 100                                             # K iteraciones iniciales con un máximo de 100
+    #Iteracion
+    while Error > tolerance  and  k < max_iter:                      # Mientras que el error sea mayor que la tolerancia y k no haya alcanzado el máximo seguimos calculando
+
+        x1[:] = x2[:]                                                # Calculamos los valores actuales de x1 y x2
+        for i in range(N):                                            
+            b1[i] = b[i] - dot( A[i, i+1:], x1[i+1:] )               # Calculamos los términos independientes restando las incógnitas a la derecha de la diagonal
+
+        for i in range(N):                                           # Selecciona los elementos a la izquierda de la diagonal A[i,:i], se selecciona las soluciones que hemos calculado x2[:i] y se multiplican ambos vectores
+            x2[i]  = ( b1[i] - dot( A[i, :i], x2[:i] ) )/ A[i, i]    # Una vez multiplicados se dividen por la diagonal  
+         
+        Error = norm(x2-x1)                                          # Calculamos la diferencia entre las aproximaciones
+        k += 1                                                       # Sumamos una iteración
 # --- 1.2 Implementación con NumPy ---
 
 
